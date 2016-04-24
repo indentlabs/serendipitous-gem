@@ -7,6 +7,7 @@ class Content
       title: 'Alice',
       type: 'Character',
       description: 'Protagonist',
+      best_friend: 'Bob',
       some_blank_field: ''
     }
     @data = defaults.merge(fields)
