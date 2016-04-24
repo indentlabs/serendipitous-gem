@@ -60,7 +60,9 @@ class SerendipitousTest < Minitest::Test
 
   def test_question_service_returns_a_question
     @content = Content.new
-    assert !QuestionService.question(@content).empty?
+    question = QuestionService.question(@content)
+    puts "Question is #{question}"
+    refute question.empty?
   end
 
   # Suggestion Service
