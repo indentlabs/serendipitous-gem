@@ -12,7 +12,8 @@ Gem::Specification.new do |s|
     'lib/serendipitous/content_service.rb',
     'lib/serendipitous/question_service.rb',
     'lib/serendipitous/suggestion_service.rb',
-    'lib/serendipitous/prompt_service.rb'
+    'lib/serendipitous/prompt_service.rb',
+    'lib/serendipitous/template_service.rb'
   ]
   s.homepage    = 'http://indentlabs.com/serendipitous'
   s.license     = 'MIT'

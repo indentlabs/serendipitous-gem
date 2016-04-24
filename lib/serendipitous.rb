@@ -4,6 +4,7 @@ require 'serendipitous/question_service'
 require 'serendipitous/suggestion_service'
 require 'serendipitous/prompt_service'
 require 'serendipitous/content_service'
+require 'serendipitous/template_service'
 
 # Gem interface
 class Serendipitous

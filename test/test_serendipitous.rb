@@ -16,7 +16,7 @@ class SerendipitousTest < Minitest::Test
   end
 
   def test_content_has_data # just reminder to add
-    @content = Content.new
+    @content = Content.new({ title: 'Hello', description: 'World' })
     assert @content.title.length > 0
     assert @content.description.length > 0
   end
@@ -26,13 +26,13 @@ class SerendipitousTest < Minitest::Test
   # Content Service
   def test_unanswered_fields_includes_blank_fields
     # TODO: mock and check specific fields
-    @content = Content.new
+    @content = Content.new({ some_blank_field: '' })
     assert ContentService.unanswered_fields(@content).include? :some_blank_field
   end
 
   def test_unanswered_fields_excludes_filled_fields
     # TODO: mock and check specific fields
-    @content = Content.new
+    @content = Content.new({title: 'Existing data'})
     refute ContentService.unanswered_fields(@content).include? :title
   end
 
@@ -53,14 +53,14 @@ class SerendipitousTest < Minitest::Test
   end
 
   def test_blank_fields_are_unanswered
-    @content = Content.new
+    @content = Content.new({ some_blank_field: '' })
     assert ContentService.unanswered_fields(@content).include? :some_blank_field
   end
 
   # Question Service
 
   def test_question_service_returns_a_question
-    @content = Content.new({ age: '', favorite_color: '', birthday: '', hometown: '' })
+    @content = Content.new({ title: 'Alice', best_friend: '', age: '', favorite_color: '', birthday: '', hometown: '' })
     question = QuestionService.question(@content)
     puts "Question is #{question}"
     refute question.empty?

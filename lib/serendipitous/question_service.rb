@@ -5,6 +5,7 @@ class QuestionService
     # TODO: Make "What is" a token based on content type + field
     #       e.g. location-reference --> "Where is _____?""
     field_to_answer = answerable_fields_for(content).keys.sample
+    puts "Answerable_fields: #{answerable_fields_for(content).keys}"
     build_question content, field_to_answer
   end
 
@@ -15,19 +16,28 @@ class QuestionService
 
   def self.build_question content, field
     type = field_type(field)
-    template = questions_for(type)
-    template
+    template = questions_for(type).sample
+      .gsub('<<field>>', field.to_s.gsub('_', ' '))
+      # TODO: SanitizationService for things like ^
+
+    TemplateService.perform_data_replacements(template, content)
   end
 
   def self.field_type value
-    # TODO: piggyback on Watson NLC for now
-    'Character'
+    # TODO: piggyback on Watson NLC
+    puts "Looking at [#{value.inspect}]"
+    case value
+    when :best_friend, :mother
+      'Character'
+    else
+      'Data'
+    end
   end
 
   # TODO: stick this in internationalized yaml
   # TODO: make this smarter
-  def self.questions_for field
-    case field_type(field)
+  def self.questions_for type
+    case type
     when 'Character'
       [
         # e.g. field=best_friend -> "Who is Alice's best friend?"
