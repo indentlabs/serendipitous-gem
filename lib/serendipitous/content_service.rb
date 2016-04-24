@@ -1,16 +1,11 @@
 # A layer of higher level methods on top of Content
 class ContentService
-  # def self.answerable_fields(content)
-  #   unanswered_fields(content)
-  # end
-
   def self.unanswered_fields(content)
-    whitelisted_fields.select do |field|
-      next if blacklisted_fields.include? field
-      # TODO: this loop be wonky
+    content.data.select do |key, value|
+      next if blacklisted_fields.include? key
+      #next unless whitelisted_fields.include? key
 
-      unanswered? content.send(field)
-      # TODO: rescue these when they fail
+      unanswered?(value)
     end
   end
 
@@ -21,11 +16,11 @@ class ContentService
 
   # TODO: make this smarter
   def self.whitelisted_fields
-    %w(title description some_blank_field)
+    @whitelisted_fields ||= %w(title description some_blank_field)
   end
 
   # TODO: make this smarter
   def self.blacklisted_fields
-    %w(id user_id)
+    @blacklisted_fields ||= %w(id user_id)
   end
 end

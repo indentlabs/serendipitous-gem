@@ -1,23 +1,21 @@
 # Temp Content class stand-in for notebook gem
 class Content
+  attr_reader :data
 
-  def self.for fields={}
-    # TODO: dynamic content fields
-    Content.new fields.merge({ some_blank_field: '' })
+  def initialize fields={}
+    defaults = {
+      title: 'Alice',
+      type: 'Character',
+      description: 'Protagonist',
+      some_blank_field: ''
+    }
+    @data = defaults.merge(fields)
   end
 
-  def title
-    "Alice"
+  # TODO: find jesus
+  def method_missing method
+   # TODO: Does this let you data[method][some_list][some_value]
+   data[method]
   end
-
-  def description
-    "Bob"
-  end
-
-  def some_blank_field
-    ''
-  end
-
-  # TODO: real attributes
 
 end
