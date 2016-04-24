@@ -22,5 +22,5 @@ irb(main):004:0> QuestionService.question(alice)
 irb(main):005:0> alice.data[:best_friend] = 'Bob'
 => "Bob"
 irb(main):006:0> QuestionService.question(alice)
-=> "What kind of relationship does Alice have with Bob?"
+=> "When did Alice meet Bob?"
 ```
