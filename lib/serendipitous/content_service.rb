@@ -11,12 +11,12 @@ class ContentService
 
   def self.unanswered?(field)
     # TODO: Compare against defaults
-    field.length == 0
+    field.nil? || field.length == 0
   end
 
   # TODO: make this smarter
   def self.whitelisted_fields
-    @whitelisted_fields ||= %w(title description some_blank_field)
+    @whitelisted_fields ||= %w(name description)
   end
 
   # TODO: make this smarter

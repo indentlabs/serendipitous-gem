@@ -5,7 +5,6 @@ class QuestionService
     # TODO: Make "What is" a token based on content type + field
     #       e.g. location-reference --> "Where is _____?""
     field_to_answer = answerable_fields_for(content).keys.sample
-    puts "Answerable_fields: #{answerable_fields_for(content).keys}"
     build_question content, field_to_answer
   end
 
@@ -41,17 +40,17 @@ class QuestionService
     when 'Character'
       [
         # e.g. field=best_friend -> "Who is Alice's best friend?"
-        "Who is [[title]]'s <<field>>?"
+        "Who is [[name]]'s <<field>>?"
       ]
     when 'Location'
       [
         # e.g. field=hometown -> "Where is Alice's home town?"
-        "Where is [[title]]'s <<field>>?"
+        "Where is [[name]]'s <<field>>?"
       ]
     when 'Item'
       [
         # e.g. field=favorite_item -> "What is Alice's favorite item?"
-        "What is [[title]]'s <<field>>?"
+        "What is [[name]]'s <<field>>?"
       ]
     when 'Data'
       [
@@ -60,7 +59,7 @@ class QuestionService
         #       height -> "How tall is..."
         #       weight -> "How much does...weigh?"
         #       age    -> "How old is..."
-        "What is [[title]]'s <<field>>?"
+        "What is [[name]]'s <<field>>?"
       ]
     else
       [

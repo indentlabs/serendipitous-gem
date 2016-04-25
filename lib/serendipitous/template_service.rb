@@ -11,6 +11,7 @@ class TemplateService
 
   def self.perform_data_replacements template, content
     template.gsub(TOKEN_REGEX) do |token|
+      puts "Found #{token}, replacing #{remove_brackets(token)} with #{replacement_for(remove_brackets(token), content)}"
       replacement_for(remove_brackets(token), content)
     end
   end
@@ -25,8 +26,7 @@ class TemplateService
   end
 
   def self.replacement_for token, content
-    # TODO: not this
-    content.send token
+    content.data[token]
   end
 
   private

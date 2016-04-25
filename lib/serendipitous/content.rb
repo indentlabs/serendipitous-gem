@@ -4,9 +4,7 @@ class Content
 
   def initialize fields={}
     defaults = {
-      type: 'Character',
-      title: '',
-      description: ''
+      'source' => 'serendipitous'
     }
     @data = defaults.merge(fields)
   end
