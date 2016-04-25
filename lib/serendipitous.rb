@@ -1,3 +1,5 @@
+require 'serendipitous/railtie' if defined?(Rails)
+
 require 'serendipitous/content'
 
 require 'serendipitous/question_service'

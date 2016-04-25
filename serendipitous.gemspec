@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'serendipitous'
-  s.version     = '0.0.1'
+  s.version     = '0.0.2'
   s.date        = '2016-04-20'
   s.summary     = 'Creative query engine'
   s.description = 'An engine for creative feedback'
@@ -8,6 +8,7 @@ Gem::Specification.new do |s|
   s.email       = 'andrew@indentlabs.com'
   s.files       = [
     'lib/serendipitous.rb',
+    'lib/serendipitous/railtie.rb',
     'lib/serendipitous/content.rb',
     'lib/serendipitous/content_service.rb',
     'lib/serendipitous/question_service.rb',
