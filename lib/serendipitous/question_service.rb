@@ -5,7 +5,11 @@ class QuestionService
     # TODO: Make "What is" a token based on content type + field
     #       e.g. location-reference --> "Where is _____?""
     field_to_answer = answerable_fields_for(content).keys.sample
-    build_question content, field_to_answer
+
+    {
+      field:    field_to_answer,
+      question: build_question(content, field_to_answer)
+    }
   end
 
   def self.answerable_fields_for(content)
@@ -24,7 +28,6 @@ class QuestionService
 
   def self.field_type value
     # TODO: piggyback on Watson NLC
-    puts "Looking at [#{value.inspect}]"
     case value
     when :best_friend, :mother
       'Character'

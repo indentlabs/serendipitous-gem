@@ -2,7 +2,7 @@
 class TemplateService
   # Regex to determine whether a word is in template replacement format
   # e.g. [[user.name]] or [[day_of_week]]
-  TOKEN_REGEX = /\[\[([^\]]+)\]\]/
+  TOKEN_REGEX = /(\[\[[^\]]+\]\])/
   # TODO: Support nested template replacement [[e.g. another_user.title]] instead of [[title]]
 
   # Regex to find symbolic reductions
@@ -11,7 +11,6 @@ class TemplateService
 
   def self.perform_data_replacements template, content
     template.gsub(TOKEN_REGEX) do |token|
-      puts "Found #{token}, replacing #{remove_brackets(token)} with #{replacement_for(remove_brackets(token), content)}"
       replacement_for(remove_brackets(token), content)
     end
   end
