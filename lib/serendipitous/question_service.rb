@@ -10,12 +10,18 @@ class QuestionService
 
     {
       field:    field_to_answer,
-      question: I18n.translate(field_to_answer, scope: [:serendipitous_questions, :attributes, content.model_name], name: content.data['name'])
+      question: build_question(content, field_to_answer)
     }
   end
 
   def self.answerable_fields_for(content)
     # TODO: aggregate QuestionServiceLayer responses here
     ContentService.unanswered_fields(content)
+  end
+
+  def self.build_question(content, field_to_answer)
+    I18n.translate "attributes.#{content.model_name}.#{field_to_answer}",
+      scope: :serendipitous_questions,
+      name: content.data['name']
   end
 end

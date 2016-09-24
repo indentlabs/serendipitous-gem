@@ -8,17 +8,14 @@ class QuestionServiceTest < Minitest::Test
   end
 
   def test_question_service_returns_a_question
-    @content = Content.new('name' => 'Alice', 'best_friend' => '', 'favorite_color' => '', 'birthday' => '', 'hometown' => '')
+    @content = Content.new('name' => 'Alice', 'best_friend' => '', 'model_name' => 'content')
     response = QuestionService.question(@content)
-    assert_match(/Alice/, response[:question])
-    assert_match(/(best friend|favorite color|birthday|hometown)/, response[:question])
-    refute response[:question].empty?
+    assert_equal response[:question], "Who is Alice’s best friend?"
   end
 
   def test_question_service_returns_the_field_asking_about
-    @content = Content.new('name' => 'Alice', 'best_friend' => '', 'favorite_color' => '', 'birthday' => '', 'hometown' => '')
+    @content = Content.new('name' => 'Alice', 'best_friend' => '', 'model_name' => 'content')
     response = QuestionService.question(@content)
-    assert_match(/(best_friend|favorite_color|birthday|hometown)/, response[:field])
-    refute response[:field].empty?
+    assert_equal response[:field], 'best_friend'
   end
 end
