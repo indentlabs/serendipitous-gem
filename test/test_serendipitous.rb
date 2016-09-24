@@ -2,6 +2,10 @@ require 'minitest/autorun'
 require 'serendipitous'
 
 class SerendipitousTest < Minitest::Test
+  def setup
+    I18n.load_path = Dir['test/en.yml']
+  end
+
   # TODO: let(:content) { Content.new }
   def test_tests_are_working
     assert_equal true, true
@@ -61,13 +65,15 @@ class SerendipitousTest < Minitest::Test
   def test_question_service_returns_a_question
     @content = Content.new({ 'name' => 'Alice', 'best_friend' => '', 'favorite_color' => '', 'birthday' => '', 'hometown' => '' })
     response = QuestionService.question(@content)
-    puts "Question is #{response[:question]}"
+    assert_match(/Alice/, response[:question])
+    assert_match(/(best friend|favorite color|birthday|hometown)/, response[:question])
     refute response[:question].empty?
   end
 
   def test_question_service_returns_the_field_asking_about
     @content = Content.new({ 'name' => 'Alice', 'best_friend' => '', 'favorite_color' => '', 'birthday' => '', 'hometown' => '' })
     response = QuestionService.question(@content)
+    assert_match(/(best_friend|favorite_color|birthday|hometown)/, response[:field])
     refute response[:field].empty?
   end
 

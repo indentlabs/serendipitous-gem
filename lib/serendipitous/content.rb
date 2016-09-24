@@ -15,4 +15,7 @@ class Content
   # data[method]
   #end
 
+  def model_name
+    'content'
+  end
 end

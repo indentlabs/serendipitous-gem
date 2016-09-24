@@ -1,3 +1,5 @@
+require 'i18n'
+
 # A layer of higher level methods on top of Content
 class ContentService
   def self.unanswered_fields(content)
@@ -21,6 +23,6 @@ class ContentService
 
   # TODO: make this smarter
   def self.blacklisted_fields
-    @blacklisted_fields ||= %w(id user_id)
+    @blacklisted_fields = I18n.translate :blacklist, scope: [:serendipitous_questions, :default]
   end
 end

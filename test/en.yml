@@ -1,0 +1,25 @@
+---
+en:
+  serendipitous_questions:
+    attributes:
+      content:
+        hometown: What is %{name}’s hometown?
+        best_friend: Who is %{name}’s best friend?
+        favorite_color: What is %{name}’s favorite color?
+        birthday: When is %{name}’s birthday?
+    # blacklist:
+      # model:
+        # - attribute_one
+        # - attribute_two
+
+    default:
+      blacklist:
+        - id
+        - user_id
+      attribute: What is %{name}’s %{attribute}?
+      # attributes:
+      #   description: Describe %{name}.
+      #   name: What is %{name}’s full name?
+      #   notes: Do you have any miscellaneous public notes for %{name}?
+      #   private_notes: Do you have any private notes for %{name}?
+      #   weight: How much does %{name} weigh?
