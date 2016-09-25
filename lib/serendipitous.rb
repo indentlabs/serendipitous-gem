@@ -25,9 +25,7 @@ module Serendipitous
     extend ActiveSupport::Concern
 
     included do
-      def question
-        field_to_answer = answerable_fields.sample
-
+      def question(field_to_answer=answerable_fields.sample)
         {
           field:    field_to_answer,
           question: build_question(field_to_answer)
@@ -35,9 +33,31 @@ module Serendipitous
       end
 
       def build_question(field_to_answer)
-        I18n.translate "attributes.#{model_name.param_key}.#{field_to_answer}",
+        question = I18n.translate "attributes.#{model_name.param_key}.#{field_to_answer}",
           scope: :serendipitous_questions,
-          name: name
+          name: name,
+          attribute: field_to_answer.to_s,
+          default: ''
+        return question unless question.blank?
+
+        question = I18n.translate "attributes.#{model_name.param_key}._",
+          scope: :serendipitous_questions,
+          name: name,
+          attribute: field_to_answer.to_s,
+          default: ''
+        return question unless question.blank?
+
+        question = I18n.translate "attributes._.#{field_to_answer}",
+          scope: :serendipitous_questions,
+          name: name,
+          attribute: field_to_answer.to_s,
+          default: ''
+        return question unless question.blank?
+
+        I18n.translate "default",
+          scope: :serendipitous_questions,
+          name: name,
+          attribute: field_to_answer.to_s
       end
 
       def answerable_fields
@@ -45,9 +65,9 @@ module Serendipitous
       end
 
       def unanswered_fields
-        attributes.keys.select do |name|
-          next if self.class.blacklist.include? name
-          unanswered?(name)
+        attributes.keys.select do |k|
+          self.class.whitelisted?(k) &&
+          unanswered?(k)
         end
       end
 
@@ -58,17 +78,23 @@ module Serendipitous
 
     module ClassMethods
       def whitelist
-        column_names - blacklist
+        column_names.map(&:to_sym) - blacklist
+      end
+
+      def whitelisted?(field_name)
+        whitelist.include? field_name
       end
 
       def blacklist
         [
-          [ I18n.translate('serendipitous_questions.blacklist._') ],
-          [ I18n.translate("serendipitous_questions.blacklist.#{model_name.param_key}", default: '').presence ],
-          [ column_names.keep_if { |a| a =~ /_id/ } ],
+          [ column_names.select { |a| a =~ /_id/ } ],
           [ 'created_at', 'updated_at'],
           [ 'id' ]
-        ].flatten.compact
+        ].flatten.compact.map(&:to_sym)
+      end
+
+      def blacklisted?(field_name)
+        blacklist.include? field_name
       end
     end
   end
