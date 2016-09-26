@@ -26,11 +26,11 @@ RSpec.describe Serendipitous::Concern do
 
   describe '#blacklist' do
     subject { Character.blacklist }
-    it { should include(:id) }
-    it { should include(:friend_id) }
-    it { should include(:created_at) }
-    it { should_not include(:name) }
-    it { should_not include(:age) }
+    it { is_expected.to include(:id) }
+    it { is_expected.to include(:friend_id) }
+    it { is_expected.to include(:created_at) }
+    it { is_expected.to_not include(:name) }
+    it { is_expected.to_not include(:age) }
   end
 
   describe '#blacklisted?' do
@@ -47,11 +47,11 @@ RSpec.describe Serendipitous::Concern do
 
   describe '#whitelist' do
     subject { Character.whitelist }
-    it { should include(:name) }
-    it { should include(:age) }
-    it { should_not include(:id) }
-    it { should_not include(:friend_id) }
-    it { should_not include(:created_at) }
+    it { is_expected.to include(:name) }
+    it { is_expected.to include(:age) }
+    it { is_expected.to_not include(:id) }
+    it { is_expected.to_not include(:friend_id) }
+    it { is_expected.to_not include(:created_at) }
   end
 
   describe '#whitelisted?' do
@@ -71,7 +71,7 @@ RSpec.describe Serendipitous::Concern do
     describe '.question(:description)[:question]' do
       subject { Character.new(name: 'Character').question(:description)[:question] }
 
-      it { should eq('Describe Character.') }
+      it { is_expected.to eq('Describe Character.') }
     end
   end
 
@@ -83,30 +83,30 @@ RSpec.describe Serendipitous::Concern do
     describe '.question(:age)[:question]' do
       subject { @model.question(:age)[:question] }
 
-      it { should eq('How old is Character?') }
+      it { is_expected.to eq('How old is Character?') }
     end
 
     describe '.question(:age)[:field]' do
       subject { @model.question(:age)[:field] }
 
-      it { should eq(:age) }
+      it { is_expected.to eq(:age) }
     end
 
     describe '.unanswered?(:age)' do
       subject { @model.unanswered?(:age) }
-      it { should eq(true)}
+      it { is_expected.to eq(true)}
     end
 
     describe '.unanswered_fields' do
       subject { @model.unanswered_fields }
 
-      it { should include(:age) }
-      it { should_not include(:id) }
+      it { is_expected.to include(:age) }
+      it { is_expected.to_not include(:id) }
     end
 
     describe '.answerable_fields' do
       subject { @model.answerable_fields }
-      it { should include(:age) }
+      it { is_expected.to include(:age) }
     end
   end
 
@@ -118,7 +118,7 @@ RSpec.describe Serendipitous::Concern do
     describe '.question' do
       subject { @model.question }
 
-      it { should eq(nil) }
+      it { is_expected.to eq(nil) }
     end
   end
 end
