@@ -76,47 +76,43 @@ RSpec.describe Serendipitous::Concern do
   end
 
   context 'when Character.age is nil' do
-    before(:each) do
-      @model = Character.new(name: 'Character', age: nil)
-    end
+    let(:model) { Character.new(name: 'Character', age: nil) }
 
     describe '.question(:age)[:question]' do
-      subject { @model.question(:age)[:question] }
+      subject { model.question(:age)[:question] }
 
       it { is_expected.to eq('How old is Character?') }
     end
 
     describe '.question(:age)[:field]' do
-      subject { @model.question(:age)[:field] }
+      subject { model.question(:age)[:field] }
 
       it { is_expected.to eq(:age) }
     end
 
     describe '.unanswered?(:age)' do
-      subject { @model.unanswered?(:age) }
+      subject { model.unanswered?(:age) }
       it { is_expected.to eq(true)}
     end
 
     describe '.unanswered_fields' do
-      subject { @model.unanswered_fields }
+      subject { model.unanswered_fields }
 
       it { is_expected.to include(:age) }
       it { is_expected.to_not include(:id) }
     end
 
     describe '.answerable_fields' do
-      subject { @model.answerable_fields }
+      subject { model.answerable_fields }
       it { is_expected.to include(:age) }
     end
   end
 
   context 'when all fields are answered' do
-    before(:each) do
-      @model = Character.new(name: 'Character', 'age': 25, 'description': 'a character', 'id': 1, 'friend_id': 2, 'created_at': Time.now.to_s )
-    end
+    let(:model) { Character.new(name: 'Character', 'age': 25, 'description': 'a character', 'id': 1, 'friend_id': 2, 'created_at': Time.now.to_s ) }
 
     describe '.question' do
-      subject { @model.question }
+      subject { model.question }
 
       it { is_expected.to eq(nil) }
     end
