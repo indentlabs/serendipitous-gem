@@ -25,7 +25,12 @@ module Serendipitous
     extend ActiveSupport::Concern
 
     included do
-      def question(field_to_answer=answerable_fields.sample)
+      def question(field_to_answer=nil)
+        if field_to_answer.nil?
+          return if answerable_fields.empty?
+          field_to_answer = answerable_fields.sample
+        end
+
         {
           field:    field_to_answer,
           question: build_question(field_to_answer)

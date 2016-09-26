@@ -99,4 +99,12 @@ RSpec.describe Serendipitous::Concern do
       expect(@model.unanswered_fields).to_not include(:id)
     end
   end
+
+  context 'when all fields are answered' do
+    it 'returns nil' do
+      @model = Character.new(name: 'Character', 'age': 25, 'description': 'a character', 'id': 1, 'friend_id': 2, 'created_at': Time.now.to_s )
+
+      expect(@model.question).to be(nil)
+    end
+  end
 end
