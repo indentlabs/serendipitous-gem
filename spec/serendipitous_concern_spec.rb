@@ -24,87 +24,101 @@ RSpec.describe Serendipitous::Concern do
     I18n.load_path = Dir['spec/en.yml']
   end
 
-  context 'always' do
-    describe '#blacklist and #blacklisted?' do
-      it 'contains "id" fields' do
-        expect(Character.blacklist).to include(:id)
-        expect(Character.blacklisted?(:id)).to be true
-      end
+  describe '#blacklist' do
+    subject { Character.blacklist }
+    it { should include(:id) }
+    it { should include(:friend_id) }
+    it { should include(:created_at) }
+    it { should_not include(:name) }
+    it { should_not include(:age) }
+  end
 
-      it 'contains "*_id" fields' do
-        expect(Character.blacklist).to include(:friend_id)
-        expect(Character.blacklisted?(:friend_id)).to be true
-      end
-
-      it 'does not contain whitelisted fields' do
-        expect(Character.blacklist).to_not include(:name)
-        expect(Character.blacklist).to_not include(:age)
-        expect(Character.blacklisted?(:name)).to be false
-        expect(Character.blacklisted?(:age)).to be false
-      end
+  describe '#blacklisted?' do
+    it 'is true for id fields' do
+      expect(Character.blacklisted?(:id)).to be true
+      expect(Character.blacklisted?(:friend_id)).to be true
     end
 
-    describe '#whitelist and #whitelisted?' do
-      it 'contains all non-blacklisted fields' do
-        expect(Character.whitelist).to include(:name)
-        expect(Character.whitelist).to include(:age)
-        expect(Character.whitelisted?(:name)).to be true
-        expect(Character.whitelisted?(:age)).to be true
-      end
-
-      it 'does not contain blacklisted fields' do
-        expect(Character.whitelist).to_not include(:id)
-        expect(Character.whitelist).to_not include(:friend_id)
-        expect(Character.whitelist).to_not include(:created_at)
-        expect(Character.whitelisted?(:id)).to be false
-        expect(Character.whitelisted?(:friend_id)).to be false
-        expect(Character.whitelisted?(:created_at)).to be false
-      end
+    it 'is false for non-blacklisted fields' do
+      expect(Character.blacklisted?(:name)).to be false
+      expect(Character.blacklisted?(:age)).to be false
     end
   end
 
-  context 'when a question for an attribute is under the generic underscore' do
-    it 'has a question for the field' do
-      @model = Character.new(name: 'Character')
-      expect(@model.question(:description)[:question]).to eq('Describe Character.')
+  describe '#whitelist' do
+    subject { Character.whitelist }
+    it { should include(:name) }
+    it { should include(:age) }
+    it { should_not include(:id) }
+    it { should_not include(:friend_id) }
+    it { should_not include(:created_at) }
+  end
+
+  describe '#whitelisted?' do
+    it 'is true for whitelisted fields' do
+      expect(Character.whitelisted?(:name)).to be true
+      expect(Character.whitelisted?(:age)).to be true
+    end
+
+    it 'is false for non-whitelisted fields' do
+      expect(Character.whitelisted?(:id)).to be false
+      expect(Character.whitelisted?(:friend_id)).to be false
+      expect(Character.whitelisted?(:created_at)).to be false
     end
   end
 
-  context 'when a field is unanswered' do
+  context 'when the question for "description" is in "attributes._"' do
+    describe '.question(:description)[:question]' do
+      subject { Character.new(name: 'Character').question(:description)[:question] }
+
+      it { should eq('Describe Character.') }
+    end
+  end
+
+  context 'when Character.age is nil' do
     before(:each) do
       @model = Character.new(name: 'Character', age: nil)
     end
 
-    it 'asks a question' do
-      expect(@model.question(:age)[:question]).to eq('How old is Character?')
+    describe '.question(:age)[:question]' do
+      subject { @model.question(:age)[:question] }
+
+      it { should eq('How old is Character?') }
     end
 
-    it 'says what field it is asking for' do
-      expect(@model.question(:age)[:field]).to eq(:age)
+    describe '.question(:age)[:field]' do
+      subject { @model.question(:age)[:field] }
+
+      it { should eq(:age) }
     end
 
-    it 'answers true to unanswered?' do
-      expect(@model.unanswered?(:age)).to be true
+    describe '.unanswered?(:age)' do
+      subject { @model.unanswered?(:age) }
+      it { should eq(true)}
     end
 
-    it 'puts the unanswered field in the unanswered_fields collection' do
-      expect(@model.unanswered_fields).to include(:age)
+    describe '.unanswered_fields' do
+      subject { @model.unanswered_fields }
+
+      it { should include(:age) }
+      it { should_not include(:id) }
     end
 
-    it 'puts the unanswered field in the answerable_fields collection' do
-      expect(@model.answerable_fields).to include(:age)
-    end
-
-    it 'does not include blacklisted fields in the answerable_fields list' do
-      expect(@model.unanswered_fields).to_not include(:id)
+    describe '.answerable_fields' do
+      subject { @model.answerable_fields }
+      it { should include(:age) }
     end
   end
 
   context 'when all fields are answered' do
-    it 'returns nil' do
+    before(:each) do
       @model = Character.new(name: 'Character', 'age': 25, 'description': 'a character', 'id': 1, 'friend_id': 2, 'created_at': Time.now.to_s )
+    end
 
-      expect(@model.question).to be(nil)
+    describe '.question' do
+      subject { @model.question }
+
+      it { should eq(nil) }
     end
   end
 end
