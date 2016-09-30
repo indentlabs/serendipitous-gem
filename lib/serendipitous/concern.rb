@@ -68,7 +68,7 @@ module Serendipitous
 
     module ClassMethods
       def whitelist
-        @whitelist ||= column_names.map(&:to_sym) - blacklist
+        column_names.map(&:to_sym) - blacklist
       end
 
       def whitelisted?(field_name)
@@ -76,7 +76,7 @@ module Serendipitous
       end
 
       def blacklist
-        @blacklist ||= [
+        [
           [column_names.select { |a| a =~ /_id/ }],
           %w(created_at updated_at),
           ['id']
