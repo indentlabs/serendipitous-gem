@@ -42,10 +42,13 @@ module Serendipitous
                                   default: ''
         return question unless question.blank?
 
-        I18n.translate 'default',
+        question = I18n.translate 'default',
                        scope: :serendipitous_questions,
                        name: name,
                        attribute: field_to_answer.to_s
+                       default: ''
+        return question unless question.blank?
+        return nil
       end
 
       def answerable_fields
