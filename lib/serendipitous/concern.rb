@@ -45,7 +45,7 @@ module Serendipitous
         question = I18n.translate 'default',
                        scope: :serendipitous_questions,
                        name: name,
-                       attribute: field_to_answer.to_s
+                       attribute: field_to_answer.to_s,
                        default: ''
         return question unless question.blank?
         return nil
@@ -68,7 +68,7 @@ module Serendipitous
 
     module ClassMethods
       def whitelist
-        column_names.map(&:to_sym) - blacklist
+        @whitelist ||= column_names.map(&:to_sym) - blacklist
       end
 
       def whitelisted?(field_name)
@@ -76,7 +76,7 @@ module Serendipitous
       end
 
       def blacklist
-        [
+        @blacklist ||= [
           [column_names.select { |a| a =~ /_id/ }],
           %w(created_at updated_at),
           ['id']
