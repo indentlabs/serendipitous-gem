@@ -1,3 +1,4 @@
+require 'serendipitous/concern'
 require 'spec_helper'
 require 'rspec/active_model/mocks'
 require 'active_model'
