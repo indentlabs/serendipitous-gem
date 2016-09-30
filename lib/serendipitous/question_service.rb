@@ -1,3 +1,5 @@
+require 'i18n'
+
 # TODO: scope this class (and all other classes) into Serendipity:: namespace
 # Takes a look at a Content and asks a question about it
 class QuestionService
@@ -17,57 +19,9 @@ class QuestionService
     ContentService.unanswered_fields(content)
   end
 
-  def self.build_question content, field
-    type = field_type(field)
-    template = questions_for(type).sample
-      .gsub('<<field>>', field.to_s.gsub('_', ' '))
-      # TODO: SanitizationService for things like ^
-
-    TemplateService.perform_data_replacements(template, content)
-  end
-
-  def self.field_type value
-    # TODO: piggyback on Watson NLC
-    case value
-    when :best_friend, :mother
-      'Character'
-    else
-      'Data'
-    end
-  end
-
-  # TODO: stick this in internationalized yaml
-  # TODO: make this smarter
-  def self.questions_for type
-    case type
-    when 'Character'
-      [
-        # e.g. field=best_friend -> "Who is Alice's best friend?"
-        "Who is [[name]]'s <<field>>?"
-      ]
-    when 'Location'
-      [
-        # e.g. field=hometown -> "Where is Alice's home town?"
-        "Where is [[name]]'s <<field>>?"
-      ]
-    when 'Item'
-      [
-        # e.g. field=favorite_item -> "What is Alice's favorite item?"
-        "What is [[name]]'s <<field>>?"
-      ]
-    when 'Data'
-      [
-        # e.g. field=height -> "What is Alice's height?"
-        # TODO: special cases here:
-        #       height -> "How tall is..."
-        #       weight -> "How much does...weigh?"
-        #       age    -> "How old is..."
-        "What is [[name]]'s <<field>>?"
-      ]
-    else
-      [
-        'Dunno lol'
-      ]
-    end
+  def self.build_question(content, field_to_answer)
+    I18n.translate "attributes.#{content.model_name}.#{field_to_answer}",
+      scope: :serendipitous_questions,
+      name: content.data['name']
   end
 end

@@ -1,0 +1,13 @@
+---
+en:
+  serendipitous_questions:
+    default: What is %{name}’s %{attribute}?
+    attributes:
+      _:
+        description: Describe %{name}.
+      character:
+        age: How old is %{name}?
+        hometown: What is %{name}’s hometown?
+        best_friend: Who is %{name}’s best friend?
+        favorite_color: What is %{name}’s favorite color?
+        birthday: When is %{name}’s birthday?

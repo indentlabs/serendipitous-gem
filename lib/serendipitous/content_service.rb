@@ -1,8 +1,10 @@
+require 'i18n'
+
 # A layer of higher level methods on top of Content
 class ContentService
   def self.unanswered_fields(content)
     content.data.select do |key, value|
-      next if blacklisted_fields.include? key
+      next if blacklisted_fields(content).include? key
       #next unless whitelisted_fields.include? key
 
       unanswered?(value)
@@ -20,7 +22,10 @@ class ContentService
   end
 
   # TODO: make this smarter
-  def self.blacklisted_fields
-    @blacklisted_fields ||= %w(id user_id)
+  def self.blacklisted_fields(content)
+    @blacklisted_fields = []
+    @blacklisted_fields.concat [I18n.translate('serendipitous_questions.blacklist._')]
+    @blacklisted_fields.concat [I18n.translate("serendipitous_questions.blacklist.#{content.model_name}")]
+    @blacklisted_fields.concat ['model_name']
   end
 end

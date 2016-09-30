@@ -1,0 +1,13 @@
+---
+en:
+  serendipitous_questions:
+    attributes:
+      content:
+        hometown: What is %{name}’s hometown?
+        best_friend: Who is %{name}’s best friend?
+        favorite_color: What is %{name}’s favorite color?
+        birthday: When is %{name}’s birthday?
+    blacklist:
+      _:
+        - id
+        - user_id

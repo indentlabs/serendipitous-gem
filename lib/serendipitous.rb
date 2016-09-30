@@ -1,4 +1,5 @@
 require 'serendipitous/railtie' if defined?(Rails)
+require 'serendipitous/concern' if defined?(Rails)
 
 require 'serendipitous/content'
 
@@ -9,7 +10,7 @@ require 'serendipitous/content_service'
 require 'serendipitous/template_service'
 
 # Gem interface
-class Serendipitous
+module Serendipitous
   def self.question(content)
     QuestionService.question(content)
   end
@@ -19,8 +20,4 @@ class Serendipitous
 
   def self.prompt(_content)
   end
-
-  # maybe
-  # def self.problems content
-  # end
 end
