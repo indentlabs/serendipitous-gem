@@ -11,15 +11,42 @@ class Character
   attr_accessor :name, :age, :description, :id, :friend_id, :created_at
 
   def attributes
-    { 'name': @name, 'age': @age, 'description': @description, 'id': @id, 'friend_id': @friend_id, 'created_at': @created_at }
+    {
+      'name' => @name,
+      'age' => @age,
+      'description' => @description,
+      'id' => @id,
+      'friend_id' => @friend_id,
+      'created_at' => @created_at
+    }
   end
 
   def self.column_names
-    ['name', 'age', 'description', 'id', 'friend_id', 'created_at']
+    [
+      'name',
+      'age',
+      'description',
+      'id',
+      'friend_id',
+      'created_at'
+    ]
   end
 end
 
-RSpec.describe Serendipitous::Concern do
+# Just testing our model to make sure we've created it like an ActiveRecord model
+describe Character do
+  describe '.attributes.keys' do
+    subject { Character.new.attributes.keys }
+    it { is_expected.to all(be_a(String)) }
+  end
+
+  describe '#column_names' do
+    subject { Character.column_names }
+    it { is_expected.to all(be_a(String)) }
+  end
+end
+
+describe Serendipitous::Concern do
   before(:all) do
     I18n.load_path = Dir['spec/en.yml']
   end
@@ -43,6 +70,11 @@ RSpec.describe Serendipitous::Concern do
       expect(Character.blacklisted?(:name)).to be false
       expect(Character.blacklisted?(:age)).to be false
     end
+
+    it 'accepts strings as arguments' do
+      expect(Character.blacklisted?('id')).to be true
+      expect(Character.blacklisted?('name')).to be false
+    end
   end
 
   describe '#whitelist' do
@@ -60,6 +92,11 @@ RSpec.describe Serendipitous::Concern do
       expect(Character.whitelisted?(:age)).to be true
     end
 
+    it 'accepts strings as arguments' do
+      expect(Character.whitelisted?('name')).to be true
+      expect(Character.whitelisted?('id')).to be false
+    end
+
     it 'is false for non-whitelisted fields' do
       expect(Character.whitelisted?(:id)).to be false
       expect(Character.whitelisted?(:friend_id)).to be false
@@ -74,6 +111,7 @@ RSpec.describe Serendipitous::Concern do
       it { is_expected.to eq('Describe Character.') }
     end
   end
+
 
   context 'when Character.age is nil' do
     let(:model) { Character.new(name: 'Character', age: nil) }
@@ -109,7 +147,16 @@ RSpec.describe Serendipitous::Concern do
   end
 
   context 'when all fields are answered' do
-    let(:model) { Character.new(name: 'Character', 'age': 25, 'description': 'a character', 'id': 1, 'friend_id': 2, 'created_at': Time.now.to_s ) }
+    let(:model) {
+      Character.new(
+        name: 'Character',
+        'age': 25,
+        'description': 'a character',
+        'id': 1,
+        'friend_id': 2,
+        'created_at': Time.now.to_s
+      )
+    }
 
     describe '.question' do
       subject { model.question }

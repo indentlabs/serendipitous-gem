@@ -26,10 +26,9 @@ module Serendipitous
 
     included do
       def question(field_to_answer=nil)
-        if field_to_answer.nil?
-          return if answerable_fields.empty?
-          field_to_answer = answerable_fields.sample
-        end
+        return if field_to_answer.nil? and answerable_fields.empty?
+
+        field_to_answer ||= answerable_fields.sample
 
         {
           field:    field_to_answer,
@@ -71,9 +70,8 @@ module Serendipitous
 
       def unanswered_fields
         attributes.keys.select do |k|
-          self.class.whitelisted?(k) &&
-          unanswered?(k)
-        end
+          self.class.whitelisted?(k.to_sym) and unanswered?(k.to_sym)
+        end.map(&:to_sym)
       end
 
       def unanswered?(field)
@@ -87,7 +85,7 @@ module Serendipitous
       end
 
       def whitelisted?(field_name)
-        whitelist.include? field_name
+        whitelist.include? field_name.to_sym
       end
 
       def blacklist
@@ -99,7 +97,7 @@ module Serendipitous
       end
 
       def blacklisted?(field_name)
-        blacklist.include? field_name
+        blacklist.include? field_name.to_sym
       end
     end
   end
